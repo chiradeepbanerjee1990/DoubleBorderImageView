@@ -7,11 +7,11 @@
         android:layout_height="match_parent"
         tools:context="com.chiradeep.sample.MainActivity">
 
-    <com.chiradeep.countryflag.imageview.CircularImageView
+    <com.chiradeep.countryflag.imageview.DoubleCircularImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:outerradius="250"
-            app:innerradius="230"
+            app:outerradius="300"
+            app:innerradius="280"
             app:outerciclecolor="@color/saffron"
             android:adjustViewBounds="true"
             app:innercirclecolor="@color/india_green"

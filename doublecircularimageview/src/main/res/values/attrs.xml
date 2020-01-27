@@ -3,7 +3,11 @@
     <declare-styleable name="DoubleCircularImageView">
         <attr name="outerciclecolor" format="color"/>
         <attr name="innercirclecolor" format="color"/>
+
         <attr name="outerradius" format="integer"/>
         <attr name="innerradius" format="integer"/>
+
+        <attr name="outerradiuswidth" format="integer"/>
+        <attr name="innerrardiuswidth" format="integer"/>
     </declare-styleable>
 </resources>

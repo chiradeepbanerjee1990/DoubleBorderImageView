@@ -12,6 +12,8 @@
             android:layout_height="wrap_content"
             app:outerradius="300"
             app:innerradius="280"
+            app:innerrardiuswidth="6"
+            app:outerradiuswidth="8"
             app:outerciclecolor="@color/saffron"
             android:adjustViewBounds="true"
             app:innercirclecolor="@color/india_green"

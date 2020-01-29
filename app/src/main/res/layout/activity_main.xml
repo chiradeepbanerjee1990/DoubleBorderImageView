@@ -15,6 +15,7 @@
             app:innerrardiuswidth="6"
             app:outerradiuswidth="8"
             app:outerciclecolor="@color/saffron"
+            app:cliptype="center"
             android:adjustViewBounds="true"
             app:innercirclecolor="@color/india_green"
             android:background="@drawable/logo"

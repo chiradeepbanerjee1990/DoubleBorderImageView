@@ -10,6 +10,7 @@ import android.view.ViewTreeObserver
 import androidx.appcompat.widget.AppCompatImageView
 import kotlin.math.min
 import android.graphics.Bitmap
+import kotlin.math.max
 
 /**
  * Author : Chiradeep Banerjee
@@ -21,6 +22,15 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
     lateinit var mCircleBorderPaint : Paint
     var outerRadius: Float = 0.0f
     var innerradius : Float = 0.0f
+
+    var clip_type = CLIP_TYPE.CENTER
+
+
+    enum class CLIP_TYPE(val flag:Boolean){
+        CENTER(true),
+        LEFT(false),
+        RIGHT(true)
+    }
 
     private var TAG : String = DoubleCircularImageView::class.java.name
 
@@ -91,23 +101,6 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         logMeasureSpecs(widthMeasureSpec,heightMeasureSpec)
 
-        if(this.background != null) {
-            var mBitmap = drawableToBitmap(this.background)
-            val smallest = min(mBitmap.width, mBitmap.height)
-            val factor = smallest / innerradius
-            val bwidth = mBitmap.width.toFloat()
-            val bheight = mBitmap.height.toFloat()
-
-
-            val newbitMap = Bitmap.createScaledBitmap(
-                mBitmap,
-                (bwidth / factor).toInt(), (bheight / factor).toInt(), true
-            )
-
-            this.background =
-                BitmapDrawable(resources, getRoundedShape(newbitMap))
-        }
-
         val desiredWidth = (outerRadius.toInt()+5) * 2
         val desiredHeight = (outerRadius.toInt()+5) * 2
 
@@ -139,11 +132,59 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
                 desiredHeight
         }
 
+        if(this.background != null) {
+            this.background =
+                BitmapDrawable(resources, getRoundedShape(getBitmapBasedOnClipData(),width))
+        }
+
         Log.e(TAG,"Measured Dimension : ${width}, ${height}")
         setMeasuredDimension(width, height)
     }
 
-    fun getRoundedShape(scaleBitmapImage: Bitmap): Bitmap {
+    fun getBitmapBasedOnClipData():Bitmap {
+        when(clip_type){
+            CLIP_TYPE.LEFT -> {
+                var mBitmap = drawableToBitmap(this.background)
+                val smallest = min(mBitmap.width, mBitmap.height)
+                val factor = smallest / innerradius
+                val bwidth = mBitmap.width.toFloat()
+                val bheight = mBitmap.height.toFloat()
+
+
+                return Bitmap.createScaledBitmap(
+                    mBitmap,
+                    (bwidth / factor).toInt(), (bheight / factor).toInt(), true
+                )
+            }
+            CLIP_TYPE.CENTER -> {
+                var mBitmap = drawableToBitmap(this.background)
+                val factor = mBitmap.width / innerradius
+                val bwidth = mBitmap.width.toFloat()
+                var bheight = if(bwidth > mBitmap.height.toFloat()){
+                    bwidth
+                }else{
+                    mBitmap.height.toFloat()
+                }
+                return Bitmap.createScaledBitmap(
+                    mBitmap,
+                    (bwidth / factor).toInt(), (bheight / factor).toInt(), true
+                )
+            }
+            else -> {
+                // Default case to return from left clip
+                var mBitmap = drawableToBitmap(this.background)
+                val factor = mBitmap.width / innerradius
+                val bwidth = mBitmap.width.toFloat()
+                var bheight = mBitmap.height.toFloat()
+                return Bitmap.createScaledBitmap(
+                    mBitmap,
+                    (bwidth / factor).toInt(), (bheight / factor).toInt(), true
+                )
+            }
+        }
+    }
+
+    fun getRoundedShape(scaleBitmapImage: Bitmap, measuredwidth : Int): Bitmap {
 
         val targetBitmap = Bitmap.createBitmap(
             innerradius.toInt(),
@@ -151,16 +192,15 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
             Bitmap.Config.ARGB_8888
         )
 
-        var shadder = BitmapShader(scaleBitmapImage,Shader.TileMode.REPEAT,Shader.TileMode.REPEAT)
+        var shadder = BitmapShader(scaleBitmapImage,Shader.TileMode.CLAMP,Shader.TileMode.CLAMP)
         var canvas = Canvas(targetBitmap)
         var radius = min(canvas.width, canvas.height/2)
         var paint = Paint()
         paint.isAntiAlias = true
         paint.shader = shadder
-
         canvas.drawCircle(
-            canvas.width.toFloat() / 2,
-            canvas.height.toFloat() / 2,
+            canvas.width.toFloat()/2,
+            canvas.height.toFloat()/2,
             radius.toFloat() - (outerRadius/2-innerradius/2) ,
             paint
         )
@@ -199,6 +239,15 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
         mCircleBorderPaint.strokeWidth = context.obtainStyledAttributes(attr, R.styleable.DoubleCircularImageView).
             getInteger(R.styleable.DoubleCircularImageView_innerrardiuswidth,3).toFloat()
         mCircleBorderPaint.style = Paint.Style.STROKE
+
+        val clipType = context.obtainStyledAttributes(attr, R.styleable.DoubleCircularImageView).
+            getInteger(R.styleable.DoubleCircularImageView_cliptype,0)
+
+        when(clipType){
+            0 -> clip_type = CLIP_TYPE.CENTER
+            1-> clip_type = CLIP_TYPE.LEFT
+            2-> clip_type = CLIP_TYPE.RIGHT
+        }
 
 
 

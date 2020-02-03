@@ -10,7 +10,9 @@ import android.view.ViewTreeObserver
 import androidx.appcompat.widget.AppCompatImageView
 import kotlin.math.min
 import android.graphics.Bitmap
-import kotlin.math.max
+
+
+
 
 /**
  * Author : Chiradeep Banerjee
@@ -27,7 +29,8 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
 
 
     enum class CLIP_TYPE(val flag:Boolean){
-        CENTER(true),
+        ALL(true),
+        CENTER(false),
         LEFT(false),
         RIGHT(true)
     }
@@ -133,8 +136,24 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
         }
 
         if(this.background != null) {
-            this.background =
-                BitmapDrawable(resources, getRoundedShape(getBitmapBasedOnClipData(),width))
+            var mBtmp = getRoundedShape(getBitmapBasedOnClipData(),width)
+
+            if(clip_type == CLIP_TYPE.RIGHT) {
+                var rotateFinalMatrix = Matrix()
+                rotateFinalMatrix.postRotate(180F)
+
+                var myBm = Bitmap.createBitmap(
+                    mBtmp, 0, 0,
+                    mBtmp.width,
+                    mBtmp.height,
+                    rotateFinalMatrix, true
+                )
+                this.background =
+                    BitmapDrawable(resources, myBm)
+            }else {
+                this.background =
+                    BitmapDrawable(resources, mBtmp)
+            }
         }
 
         Log.e(TAG,"Measured Dimension : ${width}, ${height}")
@@ -165,9 +184,33 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
                 }else{
                     mBitmap.height.toFloat()
                 }
+
+                Log.e(TAG, "bwidth is : ${bwidth} and bheight is : ${bheight}")
                 return Bitmap.createScaledBitmap(
                     mBitmap,
                     (bwidth / factor).toInt(), (bheight / factor).toInt(), true
+                )
+            }
+            CLIP_TYPE.RIGHT -> {
+                var matrix = Matrix()
+                matrix.postRotate(180F)
+
+               var rotatedBm =   Bitmap.createBitmap((this.background as BitmapDrawable).bitmap, 0, 0,
+                   ((this.background as BitmapDrawable).bitmap.width).toInt(),
+                   ((this.background as BitmapDrawable).bitmap.height/1).toInt(),
+                    matrix, true)
+
+
+                val bwidth = rotatedBm.width.toFloat()
+                val bheight = rotatedBm.height.toFloat()
+
+                val factor = rotatedBm.width.toFloat() / rotatedBm.height.toFloat()
+
+                Log.e(TAG, "bwidth is : $bwidth and bheight is : $bheight")
+
+               return  Bitmap.createScaledBitmap(
+                    rotatedBm,
+                    (bwidth *factor).toInt(), (bheight*factor ).toInt(), true
                 )
             }
             else -> {
@@ -182,6 +225,25 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
                 )
             }
         }
+    }
+
+
+    private fun transformMatrix(): Bitmap {
+        var mOriginalBitmap = drawableToBitmap(this.background)
+        val width = mOriginalBitmap.width
+        val height = mOriginalBitmap.height
+
+        val newWidth = innerradius.toInt()
+        val newHeight = innerradius.toInt()
+
+
+        var mMatrix = Matrix()
+        mMatrix.setTranslate(2F,2F)
+       return Bitmap.createBitmap(
+            mOriginalBitmap,0,0,
+           width, height,mMatrix, true
+        )
+
     }
 
     fun getRoundedShape(scaleBitmapImage: Bitmap, measuredwidth : Int): Bitmap {
@@ -243,11 +305,17 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
         val clipType = context.obtainStyledAttributes(attr, R.styleable.DoubleCircularImageView).
             getInteger(R.styleable.DoubleCircularImageView_cliptype,0)
 
-        when(clipType){
-            0 -> clip_type = CLIP_TYPE.CENTER
-            1-> clip_type = CLIP_TYPE.LEFT
-            2-> clip_type = CLIP_TYPE.RIGHT
+        Log.d(TAG,"Clip type value is ${clipType}")
+
+        clip_type = when(clipType){
+            0 -> CLIP_TYPE.CENTER
+            1 -> CLIP_TYPE.LEFT
+            2-> CLIP_TYPE.RIGHT
+            3-> CLIP_TYPE.ALL
+            else -> CLIP_TYPE.CENTER
         }
+
+        Log.d(TAG,"Clip type value is ${clip_type}")
 
 
 

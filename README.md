@@ -28,16 +28,20 @@ help you to understand how it will look like when you use this in your project.
 
 ## 4 - Screeshots
 
-**Center Crop**
+<table><tr><td>
+**Center Crop** <br/>
 <img src="screenshots/center_crop.png" width="300"> 
+</td></tr></table>    
 
-
-**Left Crop**
+<table><tr><td>
+**Left Crop** <br/>
 <img src="screenshots/left_crop.png" width="300"> 
+</td></tr></table>        
 
-
-**Right Crop**
+<table><tr><td>
+**Right Crop** <br/>
 <img src="screenshots/right_crop.png" width="300"> 
+</td></tr></table>
 
 
 

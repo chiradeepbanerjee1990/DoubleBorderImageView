@@ -28,17 +28,17 @@ help you to understand how it will look like when you use this in your project.
 
 ## 4 - Screeshots
 
-<table><tr><td>
-**Center Crop** <br/>
+<table><tr><td align="center">
+Center Crop <br/>
 <img src="screenshots/center_crop.png" width="300"> 
 </td></tr></table>    
 
-<table><tr><td>
-**Left Crop** <br/>
+<table><tr><td align="center">
+Left Crop <br/>
 <img src="screenshots/left_crop.png" width="300"> 
 </td></tr></table>        
 
-<table><tr><td>
+<table><tr><td align="center">
 **Right Crop** <br/>
 <img src="screenshots/right_crop.png" width="300"> 
 </td></tr></table>

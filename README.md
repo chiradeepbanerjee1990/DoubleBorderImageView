@@ -28,9 +28,11 @@ help you to understand how it will look like when you use this in your project.
 
 ## 4 - Screeshots
 
-<img src="screenshots/center_crop.png" width="300">
+<img src="screenshots/center_crop.png" width="300"> **Center Crop**
 
-<img src="screenshots/left_crop.png" width="300">
+<img src="screenshots/left_crop.png" width="300"> **Left Crop**
+
+<img src="screenshots/right_crop.png" width="300"> **Right Crop**
 
 
 # License

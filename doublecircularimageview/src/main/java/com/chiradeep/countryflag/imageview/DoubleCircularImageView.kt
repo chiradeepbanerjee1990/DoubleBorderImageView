@@ -168,8 +168,6 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
                 val factor = smallest / innerradius
                 val bwidth = mBitmap.width.toFloat()
                 val bheight = mBitmap.height.toFloat()
-
-
                 return Bitmap.createScaledBitmap(
                     mBitmap,
                     (bwidth / factor).toInt(), (bheight / factor).toInt(), true
@@ -196,8 +194,8 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
                 matrix.postRotate(180F)
 
                var rotatedBm =   Bitmap.createBitmap((this.background as BitmapDrawable).bitmap, 0, 0,
-                   ((this.background as BitmapDrawable).bitmap.width).toInt(),
-                   ((this.background as BitmapDrawable).bitmap.height/1).toInt(),
+                   ((this.background as BitmapDrawable).bitmap.width),
+                   ((this.background as BitmapDrawable).bitmap.height),
                     matrix, true)
 
 

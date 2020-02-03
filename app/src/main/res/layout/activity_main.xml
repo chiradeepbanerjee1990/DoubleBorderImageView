@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/logo"
-        app:cliptype="center"
+        app:cliptype="right"
         app:innercirclecolor="@color/india_green"
         app:innerradius="280"
         app:innerrardiuswidth="6"

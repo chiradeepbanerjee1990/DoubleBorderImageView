@@ -26,7 +26,7 @@ help you to understand how it will look like when you use this in your project.
 |cliptype|enum|`right`|to create the circular view from right crop|
 
 
-## 4 - Screeshots
+## 4 - Screenshots
 
 <table><tr><td align="center">
 Center Crop <br/>

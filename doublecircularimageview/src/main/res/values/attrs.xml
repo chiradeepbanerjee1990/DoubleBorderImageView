@@ -16,5 +16,7 @@
             <enum name="right" value="2"/>
             <enum name="all" value="3"/>
         </attr>
+
+        <attr name="borderanim" format="boolean"/>
     </declare-styleable>
 </resources>

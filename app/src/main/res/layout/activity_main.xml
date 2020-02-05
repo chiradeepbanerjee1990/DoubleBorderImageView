@@ -28,6 +28,7 @@
         app:innercirclecolor="@color/india_green"
         app:innerradius="280"
         app:innerrardiuswidth="6"
+        app:borderanim="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toLeftOf="parent"

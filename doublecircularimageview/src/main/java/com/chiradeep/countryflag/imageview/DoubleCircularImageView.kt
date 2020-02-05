@@ -1,5 +1,6 @@
 package com.chiradeep.countryflag.imageview
 
+import android.animation.*
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
@@ -10,6 +11,13 @@ import android.view.ViewTreeObserver
 import androidx.appcompat.widget.AppCompatImageView
 import kotlin.math.min
 import android.graphics.Bitmap
+import android.view.animation.LinearInterpolator
+import android.R.attr.strokeWidth
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 
@@ -24,6 +32,9 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
     lateinit var mCircleBorderPaint : Paint
     var outerRadius: Float = 0.0f
     var innerradius : Float = 0.0f
+
+    private var circleAnimator: ValueAnimator? = null
+    private var animationDuration = 4000
 
     var clip_type = CLIP_TYPE.CENTER
 
@@ -71,6 +82,35 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
             vieHeight.toFloat(),
             innerradius,
             mCircleBorderPaint)
+
+
+    }
+
+    fun showOuterCircularAnimation(){
+        val  mAnimator = ObjectAnimator.ofObject(mCirclePaint, "color",  ArgbEvaluator(),
+            mCirclePaint.color,mCircleBorderPaint.color)
+        mAnimator.duration = 200
+        mAnimator.repeatMode = ValueAnimator.REVERSE
+        mAnimator.repeatCount = ValueAnimator.INFINITE
+
+        mAnimator.addUpdateListener {
+            invalidate()
+        }
+        mAnimator.start()
+
+    }
+
+    fun showInnerCircularAnimation() {
+        val  mAnimator = ObjectAnimator.ofObject(mCircleBorderPaint, "color",  ArgbEvaluator(),
+            mCircleBorderPaint.color,mCirclePaint.color)
+        mAnimator.duration = 200
+        mAnimator.repeatMode = ValueAnimator.REVERSE
+        mAnimator.repeatCount = ValueAnimator.INFINITE
+
+        mAnimator.addUpdateListener {
+            invalidate()
+        }
+        mAnimator.start()
     }
 
 
@@ -97,6 +137,11 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
         }
         requestLayout()
         return false
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        invalidate()
     }
 
 
@@ -225,25 +270,6 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
         }
     }
 
-
-    private fun transformMatrix(): Bitmap {
-        var mOriginalBitmap = drawableToBitmap(this.background)
-        val width = mOriginalBitmap.width
-        val height = mOriginalBitmap.height
-
-        val newWidth = innerradius.toInt()
-        val newHeight = innerradius.toInt()
-
-
-        var mMatrix = Matrix()
-        mMatrix.setTranslate(2F,2F)
-       return Bitmap.createBitmap(
-            mOriginalBitmap,0,0,
-           width, height,mMatrix, true
-        )
-
-    }
-
     fun getRoundedShape(scaleBitmapImage: Bitmap, measuredwidth : Int): Bitmap {
 
         val targetBitmap = Bitmap.createBitmap(
@@ -315,8 +341,18 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
 
         Log.d(TAG,"Clip type value is ${clip_type}")
 
+        if(context.obtainStyledAttributes(attr,R.styleable.DoubleCircularImageView).getBoolean(R.styleable.DoubleCircularImageView_borderanim, true)) {
+            showOuterCircularAnimation()
+            showInnerCircularAnimation()
+        }
 
 
+
+    }
+
+    protected fun setAnimationProgress(strokeWidth: Float) {
+        mCirclePaint.strokeWidth = strokeWidth
+        postInvalidateOnAnimation()
     }
 
     fun drawableToBitmap(drawable: Drawable): Bitmap {

@@ -24,6 +24,7 @@ help you to understand how it will look like when you use this in your project.
 |cliptype|enum|`center`|to create the circular view from center crop|
 |cliptype|enum|`left`|to create the circular view from left crop|
 |cliptype|enum|`right`|to create the circular view from right crop|
+|borderanim|boolean|`borderanim`|to enable or disable border animation|
 
 
 ## 4 - Screenshots
@@ -39,9 +40,15 @@ Left Crop <br/>
 </td></tr></table>        
 
 <table><tr><td align="center">
-**Right Crop** <br/>
+Right Crop <br/>
 <img src="screenshots/right_crop.png" width="300"> 
 </td></tr></table>
+
+<table><tr><td align="center">
+ Border Animation <br/>
+<img src="screenshots/animation.gif" width="300"> 
+</td></tr></table>
+
 
 
 

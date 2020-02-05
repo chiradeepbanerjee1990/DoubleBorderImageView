@@ -26,11 +26,24 @@ help you to understand how it will look like when you use this in your project.
 |cliptype|enum|`right`|to create the circular view from right crop|
 
 
-## 4 - Screeshots
+## 4 - Screenshots
 
-<img src="screenshots/center_crop.png" width="300">
+<table><tr><td align="center">
+Center Crop <br/>
+<img src="screenshots/center_crop.png" width="300"> 
+</td></tr></table>    
 
-<img src="screenshots/left_crop.png" width="300">
+<table><tr><td align="center">
+Left Crop <br/>
+<img src="screenshots/left_crop.png" width="300"> 
+</td></tr></table>        
+
+<table><tr><td align="center">
+**Right Crop** <br/>
+<img src="screenshots/right_crop.png" width="300"> 
+</td></tr></table>
+
+
 
 
 # License

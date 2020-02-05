@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'maven'
 
 android {
     compileSdkVersion 29
@@ -24,6 +25,10 @@ android {
     }
 
 }
+
+group = 'com.chiradeep.doublecircularimageview'
+version = '1.0.0'
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

@@ -11,15 +11,7 @@ import android.view.ViewTreeObserver
 import androidx.appcompat.widget.AppCompatImageView
 import kotlin.math.min
 import android.graphics.Bitmap
-import android.view.animation.LinearInterpolator
-import android.R.attr.strokeWidth
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
-
-
+import com.chiradeep.doublecircular.imageview.R
 
 
 /**
@@ -28,15 +20,17 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
  */
 class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawListener {
 
+    private var TAG : String = DoubleCircularImageView::class.java.name
+
     lateinit var mCirclePaint : Paint
     lateinit var mCircleBorderPaint : Paint
     var outerRadius: Float = 0.0f
     var innerradius : Float = 0.0f
-
-    private var circleAnimator: ValueAnimator? = null
-    private var animationDuration = 4000
-
     var clip_type = CLIP_TYPE.CENTER
+    private val STICKY_WIDTH_UNDEFINED = -1
+    private val BREAK_HEIGHT = 1950
+    private val ARBITRARY_WIDTH_GREATER = 800
+    private var mStickyWidth = STICKY_WIDTH_UNDEFINED
 
 
     enum class CLIP_TYPE(val flag:Boolean){
@@ -45,13 +39,6 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
         LEFT(false),
         RIGHT(true)
     }
-
-    private var TAG : String = DoubleCircularImageView::class.java.name
-
-    private val STICKY_WIDTH_UNDEFINED = -1
-    private val BREAK_HEIGHT = 1950
-    private val ARBITRARY_WIDTH_GREATER = 800
-    private var mStickyWidth = STICKY_WIDTH_UNDEFINED
 
     constructor(context: Context?) : super(context,null) {
        init(null)
@@ -304,7 +291,7 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
      */
     private fun init(attr: AttributeSet?){
 
-        outerRadius = context.obtainStyledAttributes(attr,R.styleable.DoubleCircularImageView).
+        outerRadius = context.obtainStyledAttributes(attr, R.styleable.DoubleCircularImageView).
             getInteger(R.styleable.DoubleCircularImageView_outerradius,100).toFloat()
         innerradius = context.obtainStyledAttributes(attr,R.styleable.DoubleCircularImageView).
             getInteger(R.styleable.DoubleCircularImageView_innerradius,90).toFloat()
@@ -346,13 +333,6 @@ class DoubleCircularImageView: AppCompatImageView, ViewTreeObserver.OnPreDrawLis
             showInnerCircularAnimation()
         }
 
-
-
-    }
-
-    protected fun setAnimationProgress(strokeWidth: Float) {
-        mCirclePaint.strokeWidth = strokeWidth
-        postInvalidateOnAnimation()
     }
 
     fun drawableToBitmap(drawable: Drawable): Bitmap {
